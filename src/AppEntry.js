@@ -7,7 +7,7 @@ import { getBaseName } from '@redhat-cloud-services/frontend-components-utilitie
 
 const AppEntry = () => (
   <Provider store={init().getStore()}>
-    <Router basename={getBaseName(window.location.pathname)}>
+    <Router basename={getBaseName(window.location.pathname, 3)}>
       <App />
     </Router>
   </Provider>
