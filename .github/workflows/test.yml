@@ -10,6 +10,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
-      - run: npm run test
-      - run: npm run test:ct
-      - run: npm run coverage
+      # - run: npm run test
+      - run: npm run test:ct -- -s src/Components/ClusterHeader/ClusterHeader.cy.js --reporter junit --reporter-options "mochaFile=results/my-test-output.xml,toConsole=true"
+      # - run: npm run coverage
+      - name: archive junit report
+        uses: actions/upload-artifact@v3
+        with:
+          name: ct-results
+          path: results
+  upload-ct-report:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download junit report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ct-results
+      - uses: actions/setup-go@v3
+      - name: test upload-artifact-s3
+        run: cd upload-artifact-s3 && go run main.go
